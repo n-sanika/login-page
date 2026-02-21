@@ -3,7 +3,10 @@
 A polished, dark-themed login page built with vanilla HTML, CSS, and JavaScript. No frameworks, no dependencies — just clean, well-structured frontend code.
 
 ---
+## 🌐 Live Demo
+👉 [View Live](https://n-sanika.github.io/login-page/)
 
+---
 ## 📁 Project Structure
 
 ```
