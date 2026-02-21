@@ -1,0 +1,495 @@
+/* ===========================
+   CSS Custom Properties
+   =========================== */
+:root {
+  --bg:      #0d0d0f;
+  --card:    #131316;
+  --border:  #242428;
+  --accent:  #c8a97e;
+  --accent2: #e8c99e;
+  --text:    #f0ece4;
+  --muted:   #6b6860;
+  --error:   #e07070;
+}
+
+/* ===========================
+   Reset & Base
+   =========================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Atmospheric glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(200,169,126,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(200,169,126,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%,100% { transform: translate(0, 0); }
+  10%     { transform: translate(-2%, -3%); }
+  30%     { transform: translate(3%, -1%); }
+  50%     { transform: translate(-1%, 2%); }
+  70%     { transform: translate(2%, 1%); }
+  90%     { transform: translate(-2%, 3%); }
+}
+
+/* ===========================
+   Layout Wrapper
+   =========================== */
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(900px, 95vw);
+  height: min(560px, 90vh);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7);
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   Left Decorative Panel
+   =========================== */
+.panel {
+  background: linear-gradient(160deg, #1a1610 0%, #0e0c0a 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+}
+
+.panel-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.panel-art svg {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  opacity: 0.15;
+}
+
+.panel-lines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(200, 169, 126, 0.03) 40px,
+    rgba(200, 169, 126, 0.03) 41px
+  );
+}
+
+.panel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.panel-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.2;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50%       { transform: scale(2); opacity: 0; }
+}
+
+.panel-tag {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.2;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.panel-title em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.panel-sub {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===========================
+   Right Form Panel
+   =========================== */
+.form-panel {
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 52px 48px;
+  position: relative;
+}
+
+.form-header {
+  margin-bottom: 36px;
+}
+
+.form-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.form-header p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.divider {
+  width: 32px;
+  height: 2px;
+  background: var(--accent);
+  margin: 14px 0 0;
+}
+
+/* ===========================
+   Form Fields
+   =========================== */
+.field {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+.field:focus-within label {
+  color: var(--accent);
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: var(--accent);
+  background: rgba(200, 169, 126, 0.04);
+}
+
+input::placeholder {
+  color: #3a3834;
+}
+
+input.invalid {
+  border-color: var(--error);
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--error);
+  margin-top: 6px;
+  display: none;
+}
+
+.field-error.show {
+  display: block;
+}
+
+/* Password toggle */
+.pass-wrap {
+  position: relative;
+}
+
+.pass-wrap input {
+  padding-right: 44px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0;
+  display: flex;
+  transition: color 0.2s;
+}
+
+.toggle-pass:hover {
+  color: var(--accent);
+}
+
+/* ===========================
+   Options Row
+   =========================== */
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  font-size: 12px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.forgot {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 12px;
+  transition: opacity 0.2s;
+}
+
+.forgot:hover {
+  opacity: 0.7;
+}
+
+/* ===========================
+   Submit Button
+   =========================== */
+.btn-login {
+  width: 100%;
+  background: var(--accent);
+  color: #0d0c0a;
+  border: none;
+  border-radius: 2px;
+  padding: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-login:hover {
+  background: var(--accent2);
+}
+
+.btn-login:active {
+  transform: scale(0.98);
+}
+
+.btn-login .btn-text {
+  transition: opacity 0.2s;
+}
+
+.btn-login .spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-login.loading .btn-text {
+  opacity: 0;
+}
+
+.btn-login.loading .spinner {
+  opacity: 1;
+}
+
+.spinner-ring {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #0d0c0a;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===========================
+   Register Link
+   =========================== */
+.register {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.register a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+   Success Overlay
+   =========================== */
+.success-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.success-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.success-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.success-msg {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+}
+
+.success-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width: 600px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .panel {
+    display: none;
+  }
+
+  .form-panel {
+    padding: 40px 28px;
+  }
+}
